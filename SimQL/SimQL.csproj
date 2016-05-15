@@ -51,6 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JObjectExtensions.cs" />
+    <Compile Include="SimQLExecutor.cs" />
     <Compile Include="SimQLProgram.cs" />
     <Compile Include="SimQLProgram_Should.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

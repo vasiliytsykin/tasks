@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace SimQLTask
 {
-	class SimQLProgram
+    class SimQLProgram
 	{
 		static void Main(string[] args)
 		{
@@ -21,8 +21,8 @@ namespace SimQLTask
 			var jObject = JObject.Parse(json);
 			var data = (JObject)jObject["data"];
 			var queries = jObject["queries"].ToObject<string[]>();
-			// TODO
-			return queries.Select(q => "TODO");
+			var executer = new SimQLExecutor(data);
+			return queries.Select(q => executer.ExecuteQuery(q));
 		}
 	}
 }
