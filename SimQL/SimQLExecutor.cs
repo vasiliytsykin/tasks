@@ -21,30 +21,16 @@ namespace SimQLTask
             Match m;
 
             if (Match(@"sum\((?<path>.*)\)", query, out m))
-                return $"{query} = {data.Sum(TransformPath(m.Groups["path"].Value))}";
+                return $"{query} = {data.GetSequence(m.Groups["path"].Value).Sum()}";
             if (Match(@"min\((?<path>.*)\)", query, out m))
-                return $"{query} = {data.Min(m.Groups["path"].Value)}";
+                return $"{query} = {data.GetSequence(m.Groups["path"].Value).Min()}";
             if (Match(@"max\((?<path>.*)\)", query, out m))
-                return $"{query} = {data.Max(m.Groups["path"].Value)}";
+                return $"{query} = {data.GetSequence(m.Groups["path"].Value).Max()}";
             throw new ArgumentException("incorrect query");
         }
 
 
-        private string TransformPath(string path)
-        {
-            StringBuilder result = new StringBuilder().Append("$");
-            var parts = path.Split('.');
-            var currentToken = data.SelectToken("$");
-            foreach (var part in parts)
-            {
-                currentToken = currentToken.SelectToken(part);
-                if(currentToken.Type == JTokenType.Array)
-                result.Append($".{part}[*]");
-                else
-                result.Append($".{part}");
-            }
-            return result.ToString();
-        }
+     
 
         private bool Match(string pattern, string command, out Match m)
         {

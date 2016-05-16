@@ -15,6 +15,15 @@ namespace SimQLTask
         }
 
         [Test]
+        public void ComplexSum()
+        {
+            var results = SimQLProgram.ExecuteQueries(@"{'data': {'a':[{'b': [3.14, 4]}, {'b':[{'c':15}, {'c':9}]}], 'z':[2.65, 35]},
+                                                        'queries': [ 'sum(a.b.c)']}");
+
+            Assert.AreEqual(new[] { "sum(a.b.c) = 24" }, results);
+        }
+
+        [Test]
         public void SimpleMin()
         {
             var results = SimQLProgram.ExecuteQueries(@"{'data': {'a':{'x':3.14, 'b':[{'c':15}, {'c':9}]}, 'z':[2.65, 35]},
