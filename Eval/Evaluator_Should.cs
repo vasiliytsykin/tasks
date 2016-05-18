@@ -32,10 +32,25 @@ namespace EvalTask
         }
 
 
-        [TestCase("1 2 + 4 *", Result = 12)]
-        [TestCase("6 2 / 6 +", Result = 9)]
-        [TestCase("3 2 + 1 -", Result = 4)]
-        public double DoSimpleMath_FromPolishNotation(string input)
+        [TestCase("3 + (2 - 1)", Result = 4)]
+        [TestCase("8 / (2 + 6)", Result = 1)]
+        public double DoSimpleMathWithBrackets(string input)
+        {
+            var res = evaluator.Evaluate(input);
+            return res;
+        }
+
+        [TestCase("-3 + (2 - 1)", Result = -2)]
+        [TestCase("8 / (-2)", Result = -4)]
+        public double DoUnaryMinus(string input)
+        {
+            var res = evaluator.Evaluate(input);
+            return res;
+        }
+
+        [TestCase("3.5 + sqrt(16 + 9)", Result = 8.5)]
+        [TestCase("8 + (200 + 60)%", Result = 10.6)]
+        public double DoComplexMathWithBrackets(string input)
         {
             var res = evaluator.Evaluate(input);
             return res;

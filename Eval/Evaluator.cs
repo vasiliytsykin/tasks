@@ -7,20 +7,9 @@ namespace EvalTask
 
     enum Priority
     {
-        Low = 0,
-        High
-    }
-
-    enum Lexem
-    {
-        Add,
-        Subtract,
-        Multiply,
-        Divide,
-        Sqrt,
-        Percent,
-        OpBracket,
-        ClBracket
+        Lowest = 0,
+        Low,
+        High,
     }
 
     public class Evaluator
@@ -28,7 +17,7 @@ namespace EvalTask
 
         private readonly Dictionary<string, Func<double, double, double>> operations;
         private readonly Dictionary<string, Priority> priorities;
-        private readonly string[] lexems = {"sqrt", "+", "-", "*", "/", "%", "(", ")"};
+        private readonly string[] lexems = {"sqrt", "+", "-", "(-", "*", "/", "%", "(", ")"};
 
         public Evaluator()
         {
@@ -37,7 +26,9 @@ namespace EvalTask
                 {"+", (a, b) => a + b},
                 {"-", (a, b) => b - a},
                 {"*", (a, b) => a*b},
-                {"/", (a, b) => (int) b/a}
+                {"/", (a, b) => (int) b/a},
+                {"sqrt", (a, b) => Math.Sqrt(a+b) },
+                {"%", (a, b) => (a+b)/100}
             };
 
             priorities = new Dictionary<string, Priority>()
@@ -47,7 +38,8 @@ namespace EvalTask
                 {"*", Priority.High },
                 {"/", Priority.High },
                 {"sqrt", Priority.High },
-                {"%", Priority.High }
+                {"%", Priority.High },
+                {"(", Priority.Lowest }
             };
         }
 
@@ -105,6 +97,13 @@ namespace EvalTask
                         stack.Push(lexem);
                     }
 
+                    else if (lexem == "(-")
+                    {
+                        res.Add("0");
+                        stack.Push(lexem[0].ToString());
+                        stack.Push(lexem[1].ToString());
+                    }
+
                     else HandleSituation(res, stack, lexem);
 
                     startIndex += lexem.Length;
@@ -155,7 +154,7 @@ namespace EvalTask
         {
             StringBuilder str = new StringBuilder();
 
-            while (startIndex < exp.Length && (char.IsDigit(exp[startIndex]) || char.IsPunctuation(exp[startIndex])))
+            while (startIndex < exp.Length && (char.IsDigit(exp[startIndex]) || exp[startIndex] == '.'))
             {
                 str.Append(exp[startIndex]);
                 startIndex++;
@@ -166,7 +165,7 @@ namespace EvalTask
 
         private static bool IsUnaryMinus(Stack<string> stack, string lexem)
         {
-            return lexem == "-" && (stack.Count == 0 || stack.Peek() == "(");
+            return lexem == "-" && stack.Count == 0;
         }
     }
 }
