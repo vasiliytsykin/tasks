@@ -17,12 +17,6 @@ namespace EvalTask
             evaluator = new Evaluator();
         }
 
-        [SetUp]
-        public void SetUp()
-        {
-            
-        }
-
         [TestCase("3 + 2 - 1", Result = 4)]
         [TestCase("6 / 2 + 6", Result = 9)]
         public double DoSimpleMathWithoutBrackets(string input)
