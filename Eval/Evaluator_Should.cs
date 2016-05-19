@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace EvalTask
 {
@@ -15,6 +10,15 @@ namespace EvalTask
         public Evaluator_Should()
         {
             evaluator = new Evaluator();
+        }
+
+        [TestCase("0.1", Result = 0.1)]
+        [TestCase("-3", Result = -3)]
+        [TestCase("(-3)", Result = -3)]
+        public double EvaluateOneNumber(string input)
+        {
+            var res = evaluator.Evaluate(input);
+            return res;
         }
 
         [TestCase("3 + 2 - 1", Result = 4)]
